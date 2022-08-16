@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="a66321c3-fcb0-4462-bbef-c65964449be4" basePath="/" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="external-jarFlow" doc:id="c089e4bd-15d2-4ee2-b529-ea80df8d71a9" >
+		<http:listener doc:name="Listener" doc:id="9c3141bb-1b5c-4cd8-b2fb-3091dd952ca7" config-ref="HTTP_Listener_config" path="/externaljar"/>
+		<ee:transform doc:name="Transform Message" doc:id="e594d9fe-2e62-4c8e-a499-ba39ef5bd33d" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+import java!org::apache::commons::lang3::StringUtils
+output application/json
+---
+{
+    a: StringUtils::substring("joshua",2,5)
+}
+]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>
